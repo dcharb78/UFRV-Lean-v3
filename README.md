@@ -29,4 +29,4 @@ lake build
 
 ## License
 
-[Add your license here]
+This project is released into the public domain under [CC0 1.0 Universal](LICENSE).
