@@ -1,0 +1,36 @@
+# Lean build artifacts
+.lake/
+build/
+*.olean
+*.ilean
+*.c
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Lean cache
+.lean/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.bak
+*.tmp
+*.log
+
+# Test/validation artifacts
+test_output/
+
+# Zip archives (keep source, not archives)
+*.zip
