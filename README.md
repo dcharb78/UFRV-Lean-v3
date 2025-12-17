@@ -2,6 +2,8 @@
 
 Modular Lean4 formalization of UFRF Core and Moonshine domain logic.
 
+![Tracking](https://muddy-frog-30d2.daniel-208.workers.dev/test.png)
+
 ## Structure
 
 - **UFRF Core** (`lean/UFRF/`) - Shared bookkeeping, charts, seam/REST conventions, context tags, moduli lemmas
