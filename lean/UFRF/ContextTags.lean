@@ -1,5 +1,6 @@
 import Mathlib
 import UFRF.SeamChart
+import UFRF.Mod14
 
 /-!
 # UFRF.ContextTags
@@ -67,9 +68,16 @@ lemma seamState_at_restCrossing (g k : Nat) :
   -- compute ((b+10+14k) - b) % 14 = 10
   apply Fin.ext
   simp [seamState, restCrossing, birth, REST]
-  -- Goal: (10 + (10 * g + 14 * k) - 10 * g) % 14 = 10
-  -- Simplify: (10 + 10*g + 14*k - 10*g) % 14 = (10 + 14*k) % 14 = 10
-  simp [Nat.add_assoc, Nat.add_left_comm, Nat.add_comm, Nat.sub_add_cancel, Nat.add_mod, Nat.mul_mod_right]
+  -- Goal after simp: (10 * g + 10 + 14 * k - 10 * g) % 14 = 10
+  -- Cancel 10*g: (10*g + 10 + 14*k) - 10*g = 10 + 14*k
+  simp [Nat.add_assoc]
+  rw [Nat.add_sub_cancel_left]
+  -- Now: (10 + 14*k) % 14 = 10
+  rw [Nat.add_mod]
+  simp [mod14_mul]
+  -- Now: 10 % 14 = 10
+  have : 10 < 14 := by decide
+  exact Nat.mod_eq_of_lt this
 
 /-- Bridge→Seed overlap lemma (baseline births):
 
@@ -99,9 +107,29 @@ lemma overlap_baseline_complete_seed (g : Nat) (k : Nat)
     seamLabel (seamState g (birth (g+1) + k)) = 10 + k ∧
     seamLabel (seamState (g+1) (birth (g+1) + k)) = k := by
   constructor
-  · rcases hk with rfl | rfl | rfl <;>
-      simp [seamState, birth, seamLabel, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
-  · rcases hk with rfl | rfl | rfl <;>
-      simp [seamState, birth, seamLabel, Nat.add_assoc, Nat.add_left_comm, Nat.add_comm]
+  · -- parent label = 10+k
+    rcases hk with rfl | rfl | rfl
+    · -- k = 1: goal is (1 + 10*(g+1) - 10*g) % 14 = 11
+      simp [seamState, birth, seamLabel]
+      -- Simplify: 1 + 10*(g+1) - 10*g = 1 + 10*g + 10 - 10*g = 11
+      simp [Nat.mul_add, Nat.add_assoc]
+      rw [Nat.add_sub_cancel_left]
+      have : 11 < 14 := by decide
+      exact Nat.mod_eq_of_lt this
+    · -- k = 2: goal is (2 + 10*(g+1) - 10*g) % 14 = 12
+      simp [seamState, birth, seamLabel]
+      simp [Nat.mul_add, Nat.add_assoc]
+      rw [Nat.add_sub_cancel_left]
+      have : 12 < 14 := by decide
+      exact Nat.mod_eq_of_lt this
+    · -- k = 3: goal is (3 + 10*(g+1) - 10*g) % 14 = 13
+      simp [seamState, birth, seamLabel]
+      simp [Nat.mul_add, Nat.add_assoc]
+      rw [Nat.add_sub_cancel_left]
+      have : 13 < 14 := by decide
+      exact Nat.mod_eq_of_lt this
+  · -- child label = k
+    rcases hk with rfl | rfl | rfl <;>
+      simp [seamState, birth, seamLabel]
 
 end UFRF
