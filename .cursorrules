@@ -1,0 +1,217 @@
+# UFRF-Moonshine Modular v2 - Cursor Rules
+
+## Project Context
+
+This is a **modular Lean4 development** for UFRF Core + Moonshine domain logic. The architecture strictly separates:
+- **UFRF Core** (`lean/UFRF/`) - Shared bookkeeping, charts, seam/REST conventions, context tags, moduli lemmas
+- **Moonshine** (`lean/Moonshine/`) - Domain-specific modular forms, j-invariant, McKay-Thompson series
+- **UFRF-Moonshine Bridge** (`lean/UFRF/Moonshine/`) - Connection layer (when created)
+
+## Critical Rules - NEVER Violate
+
+### 1. Architecture Separation (STRICT)
+
+- **NEVER** import Moonshine modules into UFRF Core files
+- **NEVER** create circular dependencies between UFRF and Moonshine
+- **ALWAYS** maintain namespace separation: `UFRF.*` vs `Moonshine.*`
+- **ALWAYS** put UFRF-Moonshine bridge code in `lean/UFRF/Moonshine/`, not in `lean/Moonshine/`
+
+### 2. UFRF Core Principles (MANDATORY)
+
+- **Unity Convention**: 1 prime, 2 not prime - ALWAYS maintain this
+- **13/26 Double-Octave**: Follow the node/void approach consistently
+- **Chart vs Claims**: Strictly separate representation choices (charts) from testable selection rules (gates)
+- **13 Manifest Positions**: Use positions 1..13 for within-cycle navigation
+- **14-State Seam Chart**: Use states 0..13 when cycle boundaries/recursion matter (0=VOID, 10=REST)
+- **NEVER remove GPU-related code** if it exists
+- **Determinism**: Prefer configurations that preload/register all prime axes for determinism
+
+### 3. Lean-First Minimal Assumptions (REQUIRED)
+
+- **ALWAYS** prefer algebraic identities over limits
+- **ALWAYS** prefer finite-case proofs (e.g., `fin_cases` on `ZMod m`) for small moduli
+- **ALWAYS** keep definitions total; avoid partial constructs
+- **ALWAYS** use `Lin(x)=x` instead of base-1 logarithm
+- **NEVER** add heavy analytic machinery unless absolutely necessary
+- **NEVER** use `sorry` without a documented TODO and plan for completion
+
+### 3a. Directional Accuracy Philosophy (CRITICAL)
+
+- **UNDERSTAND**: "Directionally accurate, not 100% complete" is a VALID intermediate state
+- **ALWAYS** tag incomplete but correct work with DIRECTIONAL/REFINE/GAP tags
+- **DISTINGUISH** between:
+  - ✅ **Directionally accurate** (correct structure, incomplete) → Tag and proceed
+  - ❌ **Wrong direction** (fundamental errors) → Must fix immediately
+  - ✅ **Complete** → No tags needed
+- **ALWAYS** document what's correct and what's missing for directionally accurate work
+- **SEE**: `docs/REFINEMENT_PHILOSOPHY.md` for full guidelines
+
+### 4. Proof Architecture (ENFORCE)
+
+- **ALWAYS** start with weakest possible hypotheses
+- **ALWAYS** break complex proofs into smaller lemmas
+- **ALWAYS** document public API theorems
+- **NEVER** smuggle physics claims into mathematical theorems
+- **ALWAYS** tag new moduli/bases as either "Chart" (representation) or "Gate" (testable rule)
+
+### 5. File Organization (MAINTAIN)
+
+- **ALWAYS** keep files focused on a single concern
+- **ALWAYS** include clear public API (definitions and theorems for import)
+- **ALWAYS** keep internal lemmas local to files
+- **ALWAYS** add TODO/NEXT sections for future work
+- **NEVER** create "mega files" - split when files grow large
+
+### 6. Development Pipeline (FOLLOW)
+
+- **ALWAYS** follow the 7-phase pipeline in `docs/DEVELOPMENT_PIPELINE.md`
+- **ALWAYS** validate after each phase using `./scripts/verify.sh`
+- **ALWAYS** ensure compilation succeeds before proceeding
+- **NEVER** skip validation steps
+- **ALWAYS** update `docs/DEVELOPMENT_PIPELINE.md` at start and end of tasks
+- **UNDERSTAND**: Phases can exit with directionally accurate work (tagged) - see `docs/REFINEMENT_PHILOSOPHY.md`
+- **ALWAYS** tag incomplete work with DIRECTIONAL/REFINE/GAP before proceeding to next phase
+
+### 7. Documentation (REQUIRED)
+
+- **ALWAYS** maintain planning docs (`docs/DEVELOPMENT_PIPELINE.md`, `docs/PLAN.md`)
+- **ALWAYS** document all public API theorems
+- **ALWAYS** update documentation when making architectural changes
+- **ALWAYS** reference UFRF principles when implementing features
+
+### 8. UFRF Advanced Features (WHEN IMPLEMENTING)
+
+- **Unity Prime**: F(0)=0 (Void Prime), F(1)=1 (Unity Prime), F(2)=1 (Unity Echo) - these are the MOST prime
+- **Fibonacci Tesseract**: Tesseract synchronization at P(n) = 14 + 3n(n+2)
+- **Harmonic Resonance**: Golden ratio φ ≈ Major Sixth interval, digital roots map to musical intervals
+- **Breathing Positions**: Coord sum = 2 at sync points need harmonic corrections
+- **25 Prime Axes**: Form a musical scale, each prime creates its own tesseract "instrument"
+
+### 9. Code Quality (ENFORCE)
+
+- **ALWAYS** run `./scripts/verify.sh` before committing
+- **ALWAYS** ensure zero `sorry` in committed code (or documented temporary `sorry` with completion plan)
+- **ALWAYS** fix linter errors immediately
+- **ALWAYS** maintain consistent code style (see `docs/STYLE.md`)
+
+### 10. Import Structure (MAINTAIN)
+
+- **UFRF Core files**: Import only from `UFRF.*` and `Mathlib.*`
+- **Moonshine files**: Import from `Moonshine.*`, `UFRF.*`, and `Mathlib.*`
+- **UFRF-Moonshine Bridge**: Import from `UFRF.*` and can reference `Moonshine.*` interfaces
+- **NEVER** create circular imports
+
+## File-Specific Rules
+
+### UFRF Core Files
+
+- `SeamChart.lean`: Maintain 13 manifest positions + 14-state seam chart distinction
+- `ContextTags.lean`: REST-anchored births baseline, Bridge→Seed overlap lemma
+- `ModuliCore.lean`: Provable residue constraints only, no physics claims
+- `ModuliLogs.lean`: Use `Lin(x)=x`, explicit `mod0` for VOID reset
+- `RamanujanFunctional.lean`: Minimal assumptions, no limits unless necessary
+
+### Moonshine Files
+
+- `Basic.lean`: Keep lightweight, compile early
+- `QSeries.lean`: Choose canonical representation (PowerSeries vs LaurentSeries)
+- `JInvariant.lean`: Define both UFRF-derived and classical, prove equivalence
+- `Replicability.lean`: Faber polynomials, Hecke operators, replicability equations
+- `McKayThompson.lean`: Abstract interface, genus-zero condition
+- `GenusZero.lean`: Modular curve quotient, Hauptmodul property
+
+## When Making Changes
+
+### Before Editing
+
+1. **Check** which phase of development pipeline you're in
+2. **Review** relevant documentation (`docs/ARCHITECTURE.md`, `docs/STYLE.md`, `docs/PLAN.md`)
+3. **Verify** no circular dependencies will be created
+4. **Ensure** you're following the correct namespace conventions
+
+### During Editing
+
+1. **Maintain** architecture separation (UFRF vs Moonshine)
+2. **Follow** Lean-first minimal assumptions principle
+3. **Keep** proofs total and well-structured
+4. **Document** public API changes
+5. **Tag** new moduli as Chart or Gate
+
+### After Editing
+
+1. **Run** `lake build` to verify compilation
+2. **Run** `./scripts/verify.sh` to check for `sorry` and errors
+3. **Update** documentation if architecture changed
+4. **Update** `docs/DEVELOPMENT_PIPELINE.md` if completing a phase
+
+## Common Mistakes to Avoid
+
+❌ **DON'T**: Import `Moonshine.*` into `UFRF.*` files
+❌ **DON'T**: Add `sorry` without a completion plan
+❌ **DON'T**: Mix chart representation with physics claims
+❌ **DON'T**: Violate Unity convention (1 prime, 2 not prime)
+❌ **DON'T**: Remove GPU-related code
+❌ **DON'T**: Skip validation steps
+❌ **DON'T**: Create circular dependencies
+❌ **DON'T**: Use heavy analytic machinery when algebraic proofs suffice
+❌ **DON'T**: Forget to update planning documentation
+❌ **DON'T**: Conflate VOID (state 0) with position 13
+
+✅ **DO**: Maintain strict namespace separation
+✅ **DO**: Use finite proofs for small moduli
+✅ **DO**: Keep definitions total
+✅ **DO**: Document all public APIs
+✅ **DO**: Follow the development pipeline phases
+✅ **DO**: Validate after each change
+✅ **DO**: Update planning docs at task start/end
+✅ **DO**: Separate charts from claims
+✅ **DO**: Maintain 13/26 double-octave approach
+
+## Reference Documents
+
+- `docs/DEVELOPMENT_PIPELINE.md` - 7-phase development plan
+- `docs/REFINEMENT_PHILOSOPHY.md` - **Directional accuracy philosophy** (READ THIS)
+- `docs/ARCHITECTURE.md` - Package layout and architecture
+- `docs/PLAN.md` - Staged milestones
+- `docs/STYLE.md` - Coding style and proof architecture
+- `docs/QUICKSTART.md` - Getting started guide
+- `docs/DEPENDENCIES.md` - Dependency management
+- `docs/SUMMARY.md` - Project overview
+
+## Validation Commands
+
+```bash
+# Always run before committing
+./scripts/verify.sh
+
+# Build specific libraries
+lake build UFRF
+lake build Moonshine
+
+# Build everything
+lake build
+```
+
+## Memory Integration
+
+The following principles from project memories must be maintained:
+- Unity Prime discovery: F(0)=0, F(1)=1, F(2)=1 as foundation
+- Harmonic emergence formula: P(n) = 17 + 3n(n+2) with +3 shift for Trinity
+- Tesseract synchronization: P(n) = 14 + 3n(n+2) for harmonic corrections
+- 25 prime axes form a musical scale
+- Digital roots map to musical intervals
+- Breathing positions (coord sum=2) at sync points need corrections
+- Determinism when all prime axes are tracked
+
+## Enforcement
+
+These rules are **MANDATORY**. Any code changes that violate these rules should be:
+1. **Rejected** immediately
+2. **Refactored** to comply
+3. **Documented** if exception is truly necessary (with justification)
+
+---
+
+**Last Updated**: 2024  
+**Status**: Active Enforcement
+

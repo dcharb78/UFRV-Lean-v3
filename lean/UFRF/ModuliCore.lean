@@ -139,19 +139,17 @@ theorem mod14_zero_iff (n : ℕ) :
   simpa [pZ] using (zmod14_mul_add_two_eq_zero_iff (a := (n : ZMod 14)))
 
 /-!
-## Log ladders (placeholders)
+## Log ladders (deprecated - moved to ModuliLogs)
 
-These are intentionally *minimal* wrappers, because analytic/log theorems quickly
-pull in heavier assumptions (positivity, `x ≠ 1`, etc.).
+These log functions have been moved to `UFRF.ModuliLogs` to avoid conflicts.
+Use `UFRF.ModuliLogs.logB`, `UFRF.ModuliLogs.log2`, etc. instead.
 
-Use these as naming hooks so the rest of the UFRF development can reference
-"log1/log2/log3" without committing to extra structure too early.
+The definitions here were:
+- `log1(x) = Real.log x`
+- `log2(x) = Real.log (Real.log x)`  (iterated log)
+- `log3(x) = Real.log (Real.log (Real.log x))`  (double iterated log)
+
+Note: ModuliLogs defines `log2` as `logB 2 x` (base-2 logarithm), which is different.
 -/
-
-noncomputable def log1 (x : ℝ) : ℝ := Real.log x
-
-noncomputable def log2 (x : ℝ) : ℝ := Real.log (Real.log x)
-
-noncomputable def log3 (x : ℝ) : ℝ := Real.log (Real.log (Real.log x))
 
 end UFRF

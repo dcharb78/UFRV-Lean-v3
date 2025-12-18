@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          lake exe cache get
+
+      - name: Verify (check for sorry)
+        run: |
+          ./scripts/verify.sh
+
+      - name: Build
+        run: |
+          lake build
+
+      - name: Check UFRF library
+        run: |
+          lake build UFRF
+
+      - name: Check Moonshine library
+        run: |
+          lake build Moonshine
+

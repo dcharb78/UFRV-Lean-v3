@@ -67,17 +67,20 @@ lemma seamState_at_restCrossing (g k : Nat) :
     seamState g (restCrossing (birth g) k) = REST := by
   -- compute ((b+10+14k) - b) % 14 = 10
   apply Fin.ext
-  simp [seamState, restCrossing, birth, REST]
-  -- Goal after simp: (10 * g + 10 + 14 * k - 10 * g) % 14 = 10
-  -- Cancel 10*g: (10*g + 10 + 14*k) - 10*g = 10 + 14*k
-  simp [Nat.add_assoc]
-  rw [Nat.add_sub_cancel_left]
-  -- Now: (10 + 14*k) % 14 = 10
-  rw [Nat.add_mod]
-  simp [mod14_mul]
-  -- Now: 10 % 14 = 10
-  have : 10 < 14 := by decide
-  exact Nat.mod_eq_of_lt this
+  simp only [seamState, restCrossing, birth, REST]
+  -- Goal: (10 * g + 10 + 14 * k - 10 * g) % 14 = 10
+  -- Use have statements to break down the simplification
+  have h1 : 10 * g + 10 + 14 * k = (10 * g) + (10 + 14 * k) := by
+    simp [Nat.add_assoc]
+  have h2 : (10 * g) + (10 + 14 * k) - 10 * g = 10 + 14 * k := by
+    rw [Nat.add_sub_cancel_left]
+  have h3 : (10 + 14 * k) % 14 = (10 % 14 + (14 * k) % 14) % 14 := by
+    rw [Nat.add_mod]
+  have h4 : (14 * k) % 14 = 0 := mod14_mul k
+  have h5 : 10 % 14 = 10 := by norm_num
+  -- Chain the rewrites explicitly to preserve geometric structure
+  rw [h1, h2, h3, h4, h5]
+  -- After all rewrites, goal is already solved (10 = 10 from h5)
 
 /-- Bridge→Seed overlap lemma (baseline births):
 
@@ -110,26 +113,28 @@ lemma overlap_baseline_complete_seed (g : Nat) (k : Nat)
   · -- parent label = 10+k
     rcases hk with rfl | rfl | rfl
     · -- k = 1: goal is (1 + 10*(g+1) - 10*g) % 14 = 11
-      simp [seamState, birth, seamLabel]
-      -- Simplify: 1 + 10*(g+1) - 10*g = 1 + 10*g + 10 - 10*g = 11
-      simp [Nat.mul_add, Nat.add_assoc]
-      rw [Nat.add_sub_cancel_left]
-      have : 11 < 14 := by decide
-      exact Nat.mod_eq_of_lt this
+      simp only [seamState, birth, seamLabel]
+      -- Expand: 1 + 10*(g+1) = 1 + 10*g + 10
+      rw [Nat.mul_add]
+      -- Now: (1 + 10*g + 10 - 10*g) % 14 = 11
+      -- Simplify: 1 + 10*g + 10 - 10*g = 1 + 10 = 11
+      simp only [Nat.add_assoc, Nat.add_sub_cancel_left]
     · -- k = 2: goal is (2 + 10*(g+1) - 10*g) % 14 = 12
-      simp [seamState, birth, seamLabel]
-      simp [Nat.mul_add, Nat.add_assoc]
-      rw [Nat.add_sub_cancel_left]
-      have : 12 < 14 := by decide
-      exact Nat.mod_eq_of_lt this
+      simp only [seamState, birth, seamLabel]
+      rw [Nat.mul_add]
+      simp only [Nat.add_assoc, Nat.add_sub_cancel_left]
     · -- k = 3: goal is (3 + 10*(g+1) - 10*g) % 14 = 13
-      simp [seamState, birth, seamLabel]
-      simp [Nat.mul_add, Nat.add_assoc]
-      rw [Nat.add_sub_cancel_left]
-      have : 13 < 14 := by decide
-      exact Nat.mod_eq_of_lt this
+      simp only [seamState, birth, seamLabel]
+      rw [Nat.mul_add]
+      simp only [Nat.add_assoc, Nat.add_sub_cancel_left]
   · -- child label = k
-    rcases hk with rfl | rfl | rfl <;>
-      simp [seamState, birth, seamLabel]
+    rcases hk with rfl | rfl | rfl
+    · -- k = 1: goal is (10*(g+1) + 1 - 10*(g+1)) % 14 = 1
+      simp only [seamState, birth, seamLabel, Nat.add_sub_cancel_left]
+      -- Goal is now: 1 % 14 = 1 (child at SEED position 1)
+    · -- k = 2: goal is (10*(g+1) + 2 - 10*(g+1)) % 14 = 2
+      simp only [seamState, birth, seamLabel, Nat.add_sub_cancel_left]
+    · -- k = 3: goal is (10*(g+1) + 3 - 10*(g+1)) % 14 = 3
+      simp only [seamState, birth, seamLabel, Nat.add_sub_cancel_left]
 
 end UFRF
