@@ -1,5 +1,7 @@
 import Mathlib
 
+import Moonshine.QSeries
+
 /-!
 # Moonshine.Replicability
 
@@ -18,7 +20,6 @@ TODO:
 
 namespace Moonshine
 
--- Placeholder: replace with Laurent/Power series structure.
-abbrev QSeries (R : Type) := ℕ → R
+-- QSeries is imported from Moonshine.QSeries
 
 end Moonshine

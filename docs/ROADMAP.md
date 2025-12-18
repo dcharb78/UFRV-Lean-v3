@@ -31,10 +31,10 @@ This roadmap guides the formalization of UFRF Core axioms and their expansion to
 
 **Tasks:**
 - [x] Create Mod14 helper module with reusable lemmas
-- [ ] Fix `seamState_at_restCrossing` proof (explicit rewrites)
-- [ ] Fix `overlap_baseline_complete_seed` proof (child label cases)
-- [ ] Add tests in `tests/UFRF/TestContextTags.lean` for tag assignments
-- [ ] Verify mod 13/14 boundary overlaps
+- [x] Fix `seamState_at_restCrossing` proof (explicit rewrites)
+- [x] Fix `overlap_baseline_complete_seed` proof (child label cases)
+- [x] Add tests in `tests/UFRF/TestContextTags.lean` for tag assignments
+- [x] Verify mod 13/14 boundary overlaps
 
 **Strategy:**
 - Use `simp only [specific_lemmas]` instead of broad `simp`
@@ -46,11 +46,11 @@ This roadmap guides the formalization of UFRF Core axioms and their expansion to
 **Goal:** Create `lean/UFRF/Axioms.lean` with UFRF's five axioms.
 
 **Tasks:**
-- [ ] Define Axiom 1: Unity as concurrent E×B process
-- [ ] Define Axiom 2: Projection law composition
-- [ ] Define Axiom 3: Observer-relative scales (M=144×10^n)
-- [ ] Define Axiom 4: 13-cycle manifest + optional seam for recursion
-- [ ] Define Axiom 5: Geometric necessity (all constants emerge from geometry)
+- [x] Define Axiom 1: Unity as concurrent E×B process
+- [x] Define Axiom 2: Projection law composition
+- [x] Define Axiom 3: Observer-relative scales (M=144×10^n)
+- [x] Define Axiom 4: 13-cycle manifest + optional seam for recursion
+- [x] Define Axiom 5: Geometric necessity (all constants emerge from geometry)
 
 **Structure:**
 ```lean
@@ -79,9 +79,10 @@ end UFRF
 **Goal:** Ensure core structure is sound and testable.
 
 **Tasks:**
-- [ ] Add unit tests for each axiom
-- [ ] Verify seam chart invariants (REST↔VOID duality)
-- [ ] Test concurrent operation (no sequential assumptions)
+- [x] Add unit tests for each axiom (in TestCore.lean)
+- [x] Verify seam chart invariants (REST↔VOID duality)
+- [x] Test concurrent operation (no sequential assumptions)
+- [x] Comprehensive ContextTags tests (TestContextTags.lean)
 - [ ] Run `./scripts/verify.sh` to ensure zero `sorry`
 
 ## Phase 2: Build CORE UFRF Proof (2-4 Weeks)
