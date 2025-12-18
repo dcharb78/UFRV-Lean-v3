@@ -20,7 +20,7 @@ Short-range target:
 Long-range target:
 - An abstract Moonshine theorem: McKay–Thompson package → genus-zero/Hauptmodul.
 - A concrete discharge of the axioms for the Monster module (future).
--/-
+-/
 
 namespace Moonshine
 
