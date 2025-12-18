@@ -33,11 +33,15 @@ structure IndexShift where
 
 /-- Map a (possibly shifted) index to the **manifest** 13-cycle coordinate. -/
 def manifest13 (sh : IndexShift) (n : Int) : Fin 13 :=
-  ⟨Int.toNat ((n + sh.shift) % 13), Nat.mod_lt _ (by decide : 0 < 13)⟩
+  let m := (n + sh.shift) % 13
+  let m_nat := Int.toNat m
+  ⟨m_nat % 13, Nat.mod_lt _ (by decide : 0 < 13)⟩
 
 /-- Map a (possibly shifted) index to the **seam** 14-state coordinate. -/
 def seam14 (sh : IndexShift) (n : Int) : UFRF.Seam14 :=
-  ⟨Int.toNat ((n + sh.shift) % 14), Nat.mod_lt _ (by decide : 0 < 14)⟩
+  let m := (n + sh.shift) % 14
+  let m_nat := Int.toNat m
+  ⟨m_nat % 14, Nat.mod_lt _ (by decide : 0 < 14)⟩
 
 /-- Convenience for natural indices (common for coefficients). -/
 def seam14Nat (sh : IndexShift) (n : Nat) : UFRF.Seam14 :=
