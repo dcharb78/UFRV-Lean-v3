@@ -81,7 +81,7 @@ theorem monster_dimension_emergence :
   p.p6 * p.p7 * p.p8 + 1 = 196884 := by
   simp [monster_primes]
   -- This uses monster_dim_identity from MonsterDimension.lean
-  exact monster_dim_identity
+  exact monster_dim_identity.symm
 
 -- Uniqueness: (47, 59, 71) is the unique minimal configuration
 -- NOTE: Full uniqueness proof exists in v1 (Monster_Moonshine.lean lines 91-418)
