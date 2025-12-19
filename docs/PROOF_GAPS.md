@@ -299,7 +299,7 @@ This document identifies all remaining proof gaps, assumptions, and incomplete w
 - [x] Basic coefficient mapping established
 - [ ] j_UFRF derived from seam chart (not just copied)
 - [ ] Full replicability proven
-- [ ] Coefficient-to-seam mapping proven
+- [ ] Coefficient-to-seam mapping proven (structure done, needs Int.natCast_emod lemma)
 - [ ] REST/VOID positions proven from axioms
 - [ ] Complete Faber/Hecke definitions
 
