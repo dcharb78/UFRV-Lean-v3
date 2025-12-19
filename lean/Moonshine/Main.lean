@@ -3,11 +3,14 @@ import Mathlib
 import Moonshine.Basic
 import Moonshine.QSeries
 import Moonshine.JInvariant
+import Moonshine.JFunction
 import Moonshine.Replicability
 import Moonshine.McKayThompson
 import Moonshine.GenusZero
 import Moonshine.UFRFBridge
 import Moonshine.MonsterDimension
+import Moonshine.Monster
+import Moonshine.BabyMonster
 
 /-!
 # Moonshine.Main
