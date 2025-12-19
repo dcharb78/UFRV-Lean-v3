@@ -212,9 +212,26 @@ theorem Params.params_unique (A : Params) : A = Params.canonical := by
         -- From hdiff: (A.phi - (1 + √5)/2) * (A.phi + (1 + √5)/2) = A.phi - (1 + √5)/2
         -- Since A.phi - (1 + √5)/2 ≠ 0, we can divide: A.phi + (1 + √5)/2 = 1
         have hdiv : A.phi + (1 + Real.sqrt 5) / 2 = 1 := by
-          -- This requires showing the factor is nonzero and using division
-          -- Actually, from hdiff and hne', we get the sum directly
-          sorry -- DIRECTIONAL: Complete the division argument
+          -- From hdiff: (A.phi - (1 + √5)/2) * (A.phi + (1 + √5)/2) = A.phi - (1 + √5)/2
+          -- Since A.phi - (1 + √5)/2 ≠ 0, divide both sides:
+          -- A.phi + (1 + √5)/2 = 1
+          have hfactor_eq : (A.phi - (1 + Real.sqrt 5) / 2) * (A.phi + (1 + Real.sqrt 5) / 2) = 
+                            A.phi - (1 + Real.sqrt 5) / 2 := by
+            rw [hfactor] at hdiff
+            exact hdiff
+          -- Cancel the nonzero factor
+          have hcancel : A.phi + (1 + Real.sqrt 5) / 2 = 1 := by
+            have hnonzero : A.phi - (1 + Real.sqrt 5) / 2 ≠ 0 := hne'
+            -- From hfactor_eq: (nonzero) * (A.phi + (1 + √5)/2) = nonzero
+            -- So: A.phi + (1 + √5)/2 = 1
+            have hdiv_eq : (A.phi - (1 + Real.sqrt 5) / 2) * (A.phi + (1 + Real.sqrt 5) / 2) / 
+                           (A.phi - (1 + Real.sqrt 5) / 2) = 
+                           (A.phi - (1 + Real.sqrt 5) / 2) / (A.phi - (1 + Real.sqrt 5) / 2) := by
+              rw [hfactor_eq]
+            -- Simplify: (A.phi + (1 + √5)/2) = 1
+            field_simp [hnonzero] at hdiv_eq
+            exact hdiv_eq
+          exact hcancel
         exact hdiv
       -- From hsum: A.phi = 1 - (1 + √5)/2 = (1 - √5)/2 < 1
       have hA_lt_one : A.phi < 1 := by
