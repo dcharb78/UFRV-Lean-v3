@@ -47,18 +47,24 @@ lemma breathingAmp_seed :
 -- If a position i > 6 and i < 13 has the same breathing amplitude as seedPhase, then i = 10
 lemma breathingAmp_pos_eq_seed {i : ℕ} (hi_gt : i > 6) (hi_lt : i < 13) 
   (hamp : breathingAmp i = breathingAmp seedPhase) : i = 10 := by
+  -- breathing_period = 13 by definition
+  have hperiod_eq : breathing_period = 13 := rfl
   -- For i > 6 and i < 13, we have i % breathing_period = i
   have hi_mod : i % breathing_period = i := by
-    rw [Nat.mod_eq_of_lt hi_lt]
+    rw [hperiod_eq]
+    exact Nat.mod_eq_of_lt hi_lt
   -- Since i > 6, breathingAmp i uses the else branch: (13 - i) / 6.5
   have hamp_formula : breathingAmp i = (13 - i : ℝ) / mid := by
-    simp [breathingAmp, hi_mod, mid, breathing_period]
-    -- i > 6, so we use else branch (pos > 6)
-    -- Since i % 13 = i and i > 6, the condition `pos ≤ 6` is false
+    simp [breathingAmp, mid, breathing_period, hperiod_eq]
+    -- First, simplify i % breathing_period = i % 13 = i (since i < 13)
+    rw [hi_mod]
+    -- Now we have: if i ≤ 6 then i / 6.5 else (13 - i) / 6.5
+    -- Since i > 6, we use the else branch
     split_ifs with h
     · -- This branch is i ≤ 6, but we have i > 6, contradiction
       linarith [hi_gt, h]
-    · rfl
+    · -- This is the else branch: (13 - i) / 6.5
+      rfl
   -- Now we have: (13 - i) / 6.5 = breathingAmp seedPhase = 6/13
   have hseed_val : breathingAmp seedPhase = (6 : ℝ) / 13 := breathingAmp_seed
   rw [hamp_formula, hseed_val] at hamp
