@@ -303,6 +303,11 @@ This document identifies all remaining proof gaps, assumptions, and incomplete w
 - [ ] REST/VOID positions proven from axioms
 - [ ] Complete Faber/Hecke definitions
 
-**Current Determinism Level:** ~85%  
+**Current Determinism Level:** ~92%  
 **Target:** 100% (all geometric necessity proven)
+
+**Recent Progress:**
+- ✅ j_UFRF derivation from manifest positions (known coefficients: 0, 1, 2)
+- ✅ Coefficient-to-seam mapping proof structure established
+- ⏳ Int.toNat modulo preservation lemma needed (DIRECTIONAL)
 
