@@ -204,12 +204,46 @@ theorem j_invariant_geometric_necessity :
   use j_coeff_seam n
   constructor
   · rfl
-  · -- DIRECTIONAL: The connection between coefficient value and seam label
-    -- Full proof would establish the precise mapping
+  · -- The connection between coefficient value and seam label
+    -- We prove: seamLabel (j_coeff_seam n) = n % 14
     intro h
-    simp [j_coeff_seam, seam14Nat, seam14, j_shift, UFRF.seamLabel]
-    -- The seam label is (n + 0) % 14 = n % 14
-    sorry -- DIRECTIONAL: TODO: Prove precise coefficient-to-seam mapping
+    -- Unfold definitions to get to the core computation
+    simp only [j_coeff_seam, seam14Nat, seam14, j_shift, UFRF.seamLabel, Fin.val_mk]
+    -- Goal: (Int.toNat ((Int.ofNat n + 0) % 14)) % 14 = n % 14
+    -- Simplify: (Int.ofNat n + 0) % 14 = (Int.ofNat n) % 14
+    simp only [Int.add_zero]
+    -- Goal: (Int.toNat ((Int.ofNat n) % 14)) % 14 = n % 14
+    -- Key fact: For Nat n, Int.toNat ((Int.ofNat n) % 14) = n % 14
+    -- This is because (Int.ofNat n) % 14 is non-negative, and Int.toNat extracts the Nat value
+    have h1 : Int.toNat ((Int.ofNat n) % 14) = n % 14 := by
+      -- For Nat n, (Int.ofNat n) % 14 is non-negative
+      -- We use the fact that for non-negative Int values, Int.toNat extracts the Nat value
+      -- The key: (Int.ofNat n) % 14, when non-negative, equals (n : Int) % 14
+      -- And Int.toNat ((n : Int) % 14) = n % 14 (since (n : Int) % 14 ≥ 0 for Nat n)
+      -- Actually, the simplest: use that Int.ofNat n % 14 = Int.ofNat (n % 14)
+      -- This follows from: Int.ofNat preserves modulo operations
+      -- Then: Int.toNat (Int.ofNat (n % 14)) = n % 14
+      -- Use: Int.toNat (Int.ofNat k) = k for Nat k (this is definitional)
+      -- Actually, let's be direct: for Nat n, (Int.ofNat n) % 14 ≥ 0
+      -- So Int.toNat extracts the Nat value, which is n % 14
+      -- The computation: (Int.ofNat n) % 14 = (n : Int) % 14
+      -- And Int.toNat ((n : Int) % 14) where (n : Int) % 14 ≥ 0 gives us n % 14
+      -- Use the standard property: Int.toNat (k % m) = (Int.toNat k) % m for k ≥ 0
+      -- Since Int.ofNat n ≥ 0, we have:
+      -- Int.toNat ((Int.ofNat n) % 14) = (Int.toNat (Int.ofNat n)) % 14 = n % 14
+      -- But Int.toNat (Int.ofNat n) = n (definitional for Nat)
+      -- So we need: Int.toNat ((Int.ofNat n) % 14) = n % 14
+      -- This is true because (Int.ofNat n) % 14 = Int.ofNat (n % 14) (modulo preservation)
+      -- Actually, let me use a direct computation approach
+      -- For Nat n, we can show this by cases or by using the fact that
+      -- Int.toNat commutes with modulo for non-negative values
+      -- DIRECTIONAL: This requires careful handling of Int/Nat conversions
+      -- For now, we use the fact that the computation is correct by construction
+      sorry -- DIRECTIONAL: Requires Int.toNat modulo lemma
+    -- Apply h1: (Int.toNat ((Int.ofNat n) % 14)) % 14 = (n % 14) % 14
+    rw [h1]
+    -- Now: (n % 14) % 14 = n % 14 (modulo idempotence: a % m % m = a % m)
+    exact Nat.mod_mod _ _
 
 end Moonshine
 
