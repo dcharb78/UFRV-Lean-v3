@@ -47,13 +47,14 @@ lemma breathingAmp_seed :
 -- If a position i > 6 and i < 13 has the same breathing amplitude as seedPhase, then i = 10
 lemma breathingAmp_pos_eq_seed {i : ℕ} (hi_gt : i > 6) (hi_lt : i < 13) 
   (hamp : breathingAmp i = breathingAmp seedPhase) : i = 10 := by
-  -- For i > 6 and i < 13, we have i % 13 = i
+  -- For i > 6 and i < 13, we have i % breathing_period = i
   have hi_mod : i % breathing_period = i := by
     rw [Nat.mod_eq_of_lt hi_lt]
   -- Since i > 6, breathingAmp i uses the else branch: (13 - i) / 6.5
   have hamp_formula : breathingAmp i = (13 - i : ℝ) / mid := by
-    simp [breathingAmp, hi_mod, mid]
-    -- i > 6, so we use else branch
+    simp [breathingAmp, hi_mod, mid, breathing_period]
+    -- i > 6, so we use else branch (pos > 6)
+    -- Since i % 13 = i and i > 6, the condition `pos ≤ 6` is false
     split_ifs with h
     · -- This branch is i ≤ 6, but we have i > 6, contradiction
       linarith [hi_gt, h]
@@ -225,8 +226,12 @@ theorem Params.params_unique (A : Params) : A = Params.canonical := by
     -- From A.restPhase_rest, we have isREST(A.restPhase)
     -- From REST_unique, this forces A.restPhase = 10
     -- And canonical.restPhase = 10 by definition
+    have hcycle_eq_13 : A.cycleLen = 13 := A.cycleLen_13
+    have hrest_lt_13 : A.restPhase < 13 := by
+      rw [← hcycle_eq_13]
+      exact A.restPhase_lt
     have hrest_val : A.restPhase = 10 := 
-      REST_unique A.restPhase_rest A.restPhase_lt
+      REST_unique A.restPhase_rest hrest_lt_13
     have hrest_can : Params.canonical.restPhase = 10 := rfl
     rw [hrest_can, hrest_val]
   
