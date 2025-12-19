@@ -246,22 +246,49 @@ This document identifies all remaining proof gaps, assumptions, and incomplete w
 
 ## Recommended Next Steps
 
-1. **Derive j_UFRF from seam chart** (High Priority)
-   - Implement actual coefficient derivation
-   - Prove geometric necessity
+### Based on Reference Repo Insights
+
+**Reference:** https://github.com/dcharb78/UFRF-MonsterMoonshinev1 (proved j-function and Monster Moonshine from UFRF)
+
+**Key insights to incorporate:**
+1. **Parameter uniqueness** - UFRF has no free parameters (determinism)
+2. **j-coefficient derivation from mod 13 positions** - Coefficients emerge from manifest positions
+3. **Invariance theorems** - Coefficients are invariant under parameter choices
+4. **Arithmetic progression constraints** - Primes at positions 6,7,8 mod 13 → 196884
+
+---
+
+1. **Derive j_UFRF from manifest positions** (Highest Priority)
+   - **Reference pattern:** They derived coefficients from mod 13 positions
+   - **Our approach:** Derive from `manifest13` positions (13-cycle)
+   - Map manifest position → coefficient value
+   - Prove: `coeff j_UFRF n` emerges from `manifest13 j_shift n`
    - Then prove `j_UFRF = j_classical` from derivation
+   - **See:** `docs/REFERENCE_INSIGHTS.md` for detailed approach
 
 2. **Complete coefficient-to-seam mapping** (High Priority)
    - Prove the `sorry` in `j_invariant_geometric_necessity`
-   - Establish precise connection
+   - **Reference insight:** Non-zero coefficients correspond to specific geometric positions
+   - Use: `seamLabel (j_coeff_seam n) = n % 14` (by definition)
+   - Prove: `coeff j_classical n ≠ 0 → seamLabel (j_coeff_seam n) = n % 14`
+   - Connect to manifest position structure
 
-3. **Complete replicability framework** (High Priority)
+3. **Prove parameter uniqueness** (High Priority - if adding Params)
+   - **Reference:** They proved `params_unique : ∀ A : Params, A = Params.canonical`
+   - **Our approach:** Either add `UFRF.Params` structure OR prove REST/VOID directly from axioms
+   - Establishes determinism: no free parameters
+   - Proves REST=10, VOID=0 are geometrically necessary
+
+4. **Complete replicability framework** (Medium Priority)
    - Implement full Faber polynomials
    - Implement full Hecke operators
    - Prove full replicability
+   - **Note:** Can proceed after j_UFRF derivation is complete
 
-4. **Prove REST/VOID from axioms** (Medium Priority)
+5. **Prove REST/VOID from axioms** (Medium Priority)
    - Show geometric necessity of positions 0 and 10
+   - **Reference:** They proved positions emerge from arithmetic constraints
+   - **Our approach:** Prove from Axiom 1 (E×B) + Axiom 4 (13-cycle)
 
 ---
 
