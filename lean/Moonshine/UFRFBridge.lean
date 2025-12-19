@@ -113,6 +113,10 @@ geometric structure underlying the modular form.
 /-- Standard shift for j-invariant: index 0 corresponds to q^{-1}. -/
 def j_shift : IndexShift := ⟨0⟩
 
+/-- Map a j-invariant coefficient index to its manifest position. -/
+def j_coeff_manifest (n : Nat) : UFRF.Manifest13 :=
+  manifest13 j_shift (Int.ofNat n)
+
 /-- Map a j-invariant coefficient index to its seam state. -/
 def j_coeff_seam (n : Nat) : UFRF.Seam14 :=
   seam14Nat j_shift n
