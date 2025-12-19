@@ -79,9 +79,7 @@ def monster_primes : ArithmeticProgression where
 theorem monster_dimension_emergence :
   let p := monster_primes
   p.p6 * p.p7 * p.p8 + 1 = 196884 := by
-  simp [monster_primes]
-  -- This uses monster_dim_identity from MonsterDimension.lean
-  exact monster_dim_identity.symm
+  simp [monster_primes, monster_dim_identity]
 
 -- Uniqueness: (47, 59, 71) is the unique minimal configuration
 -- NOTE: Full uniqueness proof exists in v1 (Monster_Moonshine.lean lines 91-418)
