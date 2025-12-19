@@ -6,6 +6,8 @@ import UFRF.ModuliLogs
 import UFRF.RamanujanFunctional
 import UFRF.Mod14
 import UFRF.Axioms
+import UFRF.Params
+import UFRF.LogSpaces
 
 /-!
 # UFRF Core - Unified Import
