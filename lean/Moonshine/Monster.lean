@@ -87,12 +87,12 @@ theorem monster_dimension_emergence :
 -- NOTE: Full uniqueness proof exists in v1 (Monster_Moonshine.lean lines 91-418)
 -- This is a placeholder - will integrate full proof in next phase
 theorem monster_primes_unique_minimal (ap : ArithmeticProgression) :
-  ap.p6 * ap.p7 * p.p8 + 1 = 196884 →
+  ap.p6 * ap.p7 * ap.p8 + 1 = 196884 →
   ap.p6 = 71 ∧ ap.p7 = 59 ∧ ap.p8 = 47 := by
   -- DIRECTIONAL: Full proof from v1 shows uniqueness via mod 13 constraints
   -- For now, this is a stub to allow integration to proceed
-  -- TODO: Integrate full uniqueness proof from v1
-  admit
+  -- TODO: Integrate full uniqueness proof from v1 (Monster_Moonshine.lean lines 91-418)
+  sorry -- DIRECTIONAL: Full uniqueness proof to be integrated from v1
 
 end Moonshine
 
