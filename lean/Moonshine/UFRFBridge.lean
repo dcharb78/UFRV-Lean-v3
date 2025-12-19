@@ -222,32 +222,9 @@ theorem j_invariant_geometric_necessity :
       -- Then: Int.toNat (Int.ofNat (n % 14)) = n % 14
       -- Step 1: Show modulo preservation
       have h_mod_eq : (Int.ofNat n) % 14 = Int.ofNat (n % 14) := by
-        -- Use Int.natCast_mod: ↑(m % n) = ↑m % ↑n for Nat m, n
-        -- Goal: ↑n % 14 = ↑(n % 14)
-        -- The lemma Int.natCast_mod is marked @[simp, norm_cast]
-        -- Use norm_cast to handle the coercion automatically
+        -- Int.natCast_mod: ↑(m % n) = ↑m % ↑n for Nat m, n
+        -- norm_cast handles the coercion automatically
         norm_cast
-        -- For Nat n, (n : Int) % m = ((n % m) : Int)
-        -- Use: Int.natCast_mod which states ↑(m % n) = ↑m % ↑n for Nat m, n
-        -- The goal: (Int.ofNat n) % 14 = Int.ofNat (n % 14)
-        -- Which is: ↑n % (14 : Nat) = ↑(n % 14)
-        -- The lemma Int.natCast_mod n 14 states: ↑(n % 14) = ↑n % ↑14
-        -- So we use it in reverse: rw [← Int.natCast_mod n 14]
-        -- But the goal has 14 as Nat, so we need to convert it
-        -- Actually, Lean coerces Nat to Int in modulo, so 14 becomes ↑14
-        -- Use the lemma: Int.natCast_mod n 14 gives ↑(n % 14) = ↑n % ↑14
-        -- We want: ↑n % ↑14 = ↑(n % 14)
-        -- So: rw [← Int.natCast_mod n 14]
-        -- But we need to ensure types match - let's use norm_cast or explicit conversion
-        -- Actually, since Int.natCast_mod is marked @[simp, norm_cast], simp should handle it
-        -- But it's not matching because 14 is a literal. Let's be explicit:
-        -- Convert 14 to Int explicitly: (Int.ofNat n) % 14 = (Int.ofNat n) % (Int.ofNat 14)
-        -- Now goal is: Int.ofNat n % Int.ofNat 14 = Int.ofNat (n % 14)
-        -- Which is: ↑n % ↑14 = ↑(n % 14)
-        -- Use: Int.natCast_mod n 14 which states: ↑(n % 14) = ↑n % ↑14
-        -- Since Int.natCast_mod is marked @[simp, norm_cast], simp should apply it
-        -- But we need to ensure 14 is coerced first
-        simp only [Int.natCast_mod]
       -- Step 2: Apply the equality
       rw [h_mod_eq]
       -- Step 3: Show Int.toNat (Int.ofNat (n % 14)) = n % 14

@@ -99,6 +99,7 @@ theorem monster_primes_unique_minimal (ap : ArithmeticProgression) :
   -- 1. Factorization uniqueness: {ap.p6, ap.p7, ap.p8} = {47, 59, 71}
   -- 2. Mod 13 constraints: p8 ≡ 8 → p8 = 47, p7 ≡ 7 → p7 = 59, p6 ≡ 6 → p6 = 71
   -- For now, we establish the structure
+  -- TODO: Integrate full uniqueness proof from v1 (Monster_Moonshine.lean lines 91-418)
   sorry -- DIRECTIONAL: Full uniqueness proof to be integrated from v1
 
 end Moonshine
