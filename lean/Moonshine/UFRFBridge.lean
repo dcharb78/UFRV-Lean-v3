@@ -222,22 +222,32 @@ theorem j_invariant_geometric_necessity :
       -- Then: Int.toNat (Int.ofNat (n % 14)) = n % 14
       -- Step 1: Show modulo preservation
       have h_mod_eq : (Int.ofNat n) % 14 = Int.ofNat (n % 14) := by
+        -- Use Int.natCast_mod: ↑(m % n) = ↑m % ↑n for Nat m, n
+        -- Goal: ↑n % 14 = ↑(n % 14)
+        -- The lemma Int.natCast_mod is marked @[simp, norm_cast]
+        -- Use norm_cast to handle the coercion automatically
+        norm_cast
         -- For Nat n, (n : Int) % m = ((n % m) : Int)
-        -- This is because Int.ofNat (natCast) preserves modulo operations
-        -- Key fact: For non-negative Int values, modulo in Int matches modulo in Nat
-        -- Since Int.ofNat n ≥ 0, we have (Int.ofNat n) % 14 ≥ 0
-        -- And for non-negative k, (k : Int) % m = ((k % m) : Int)
-        -- This follows from the definition: Int modulo on non-negative values preserves Nat modulo
-        -- Use: Int.emod_natCast_natCast or prove directly
-        -- Actually, the simplest: use that Int.ofNat preserves modulo
-        -- For Nat n and positive m, (n : Int) % m = ((n % m) : Int)
-        -- This is a standard property: natCast commutes with modulo
-        -- Let's prove it by using the fact that modulo on non-negative Ints matches Nat modulo
-        -- Since Int.ofNat n ≥ 0, the modulo operation computes the same as in Nat
-        -- Use: Int.natCast_emod or prove by computation
-        -- DIRECTIONAL: This requires a lemma about natCast and modulo
-        -- For now, we use the computational fact that this is correct
-        sorry -- DIRECTIONAL: Requires Int.natCast_emod or similar lemma
+        -- Use: Int.natCast_mod which states ↑(m % n) = ↑m % ↑n for Nat m, n
+        -- The goal: (Int.ofNat n) % 14 = Int.ofNat (n % 14)
+        -- Which is: ↑n % (14 : Nat) = ↑(n % 14)
+        -- The lemma Int.natCast_mod n 14 states: ↑(n % 14) = ↑n % ↑14
+        -- So we use it in reverse: rw [← Int.natCast_mod n 14]
+        -- But the goal has 14 as Nat, so we need to convert it
+        -- Actually, Lean coerces Nat to Int in modulo, so 14 becomes ↑14
+        -- Use the lemma: Int.natCast_mod n 14 gives ↑(n % 14) = ↑n % ↑14
+        -- We want: ↑n % ↑14 = ↑(n % 14)
+        -- So: rw [← Int.natCast_mod n 14]
+        -- But we need to ensure types match - let's use norm_cast or explicit conversion
+        -- Actually, since Int.natCast_mod is marked @[simp, norm_cast], simp should handle it
+        -- But it's not matching because 14 is a literal. Let's be explicit:
+        -- Convert 14 to Int explicitly: (Int.ofNat n) % 14 = (Int.ofNat n) % (Int.ofNat 14)
+        -- Now goal is: Int.ofNat n % Int.ofNat 14 = Int.ofNat (n % 14)
+        -- Which is: ↑n % ↑14 = ↑(n % 14)
+        -- Use: Int.natCast_mod n 14 which states: ↑(n % 14) = ↑n % ↑14
+        -- Since Int.natCast_mod is marked @[simp, norm_cast], simp should apply it
+        -- But we need to ensure 14 is coerced first
+        simp only [Int.natCast_mod]
       -- Step 2: Apply the equality
       rw [h_mod_eq]
       -- Step 3: Show Int.toNat (Int.ofNat (n % 14)) = n % 14
@@ -246,6 +256,7 @@ theorem j_invariant_geometric_necessity :
       -- and Int.toNat extracts the Nat value from a non-negative Int
       -- Since Int.ofNat (n % 14) ≥ 0, Int.toNat gives us the Nat value directly
       -- This is definitional equality - Int.toNat (Int.ofNat (n % 14)) = n % 14
+      -- Use rfl since this is definitional
       rfl
     -- Apply h1: (Int.toNat ((Int.ofNat n) % 14)) % 14 = (n % 14) % 14
     rw [h1]
