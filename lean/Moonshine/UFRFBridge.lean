@@ -216,30 +216,29 @@ theorem j_invariant_geometric_necessity :
     -- Key fact: For Nat n, Int.toNat ((Int.ofNat n) % 14) = n % 14
     -- This is because (Int.ofNat n) % 14 is non-negative, and Int.toNat extracts the Nat value
     have h1 : Int.toNat ((Int.ofNat n) % 14) = n % 14 := by
-      -- For Nat n, (Int.ofNat n) % 14 is non-negative
-      -- We use the fact that for non-negative Int values, Int.toNat extracts the Nat value
-      -- The key: (Int.ofNat n) % 14, when non-negative, equals (n : Int) % 14
-      -- And Int.toNat ((n : Int) % 14) = n % 14 (since (n : Int) % 14 ≥ 0 for Nat n)
-      -- Actually, the simplest: use that Int.ofNat n % 14 = Int.ofNat (n % 14)
-      -- This follows from: Int.ofNat preserves modulo operations
-      -- Then: Int.toNat (Int.ofNat (n % 14)) = n % 14
-      -- Use: Int.toNat (Int.ofNat k) = k for Nat k (this is definitional)
-      -- Actually, let's be direct: for Nat n, (Int.ofNat n) % 14 ≥ 0
-      -- So Int.toNat extracts the Nat value, which is n % 14
+      -- For Nat n, we need to show: Int.toNat ((Int.ofNat n) % 14) = n % 14
+      -- Key insight: (Int.ofNat n) % 14 is non-negative (since Int.ofNat n ≥ 0)
+      -- So Int.toNat extracts the Nat value directly
       -- The computation: (Int.ofNat n) % 14 = (n : Int) % 14
-      -- And Int.toNat ((n : Int) % 14) where (n : Int) % 14 ≥ 0 gives us n % 14
-      -- Use the standard property: Int.toNat (k % m) = (Int.toNat k) % m for k ≥ 0
-      -- Since Int.ofNat n ≥ 0, we have:
-      -- Int.toNat ((Int.ofNat n) % 14) = (Int.toNat (Int.ofNat n)) % 14 = n % 14
-      -- But Int.toNat (Int.ofNat n) = n (definitional for Nat)
-      -- So we need: Int.toNat ((Int.ofNat n) % 14) = n % 14
-      -- This is true because (Int.ofNat n) % 14 = Int.ofNat (n % 14) (modulo preservation)
-      -- Actually, let me use a direct computation approach
-      -- For Nat n, we can show this by cases or by using the fact that
-      -- Int.toNat commutes with modulo for non-negative values
-      -- DIRECTIONAL: This requires careful handling of Int/Nat conversions
-      -- For now, we use the fact that the computation is correct by construction
-      sorry -- DIRECTIONAL: Requires Int.toNat modulo lemma
+      -- And for non-negative k, Int.toNat k gives the absolute value, which is k itself
+      -- Since (Int.ofNat n) % 14 ≥ 0, we have Int.toNat ((Int.ofNat n) % 14) = (Int.ofNat n) % 14 (as Nat)
+      -- But we need to show this equals n % 14
+      -- The key: (Int.ofNat n) % 14 = Int.ofNat (n % 14) (modulo preservation)
+      -- Then: Int.toNat (Int.ofNat (n % 14)) = n % 14
+      -- Let's prove this step by step:
+      -- First, show that modulo commutes with Int.ofNat
+      have h_nonneg : 0 ≤ (Int.ofNat n) % 14 := Int.emod_nonneg (Int.ofNat n) (by norm_num : (0 : Int) < 14)
+      -- For non-negative Int values, Int.toNat is the identity (as Nat)
+      -- So: Int.toNat ((Int.ofNat n) % 14) = (Int.ofNat n) % 14 (as Nat)
+      -- But we need: (Int.ofNat n) % 14 (as Nat) = n % 14
+      -- This is true because Int.ofNat preserves modulo: (n : Int) % m = (n % m : Int)
+      -- Actually, let's use the fact that for Nat n, the modulo in Int matches modulo in Nat
+      -- Use: Int.toNat_emod for non-negative values
+      -- Or prove directly: since (Int.ofNat n) % 14 ≥ 0, Int.toNat gives us the Nat value
+      -- And (Int.ofNat n) % 14 (as computation) equals n % 14 (as Nat)
+      -- DIRECTIONAL: This requires a lemma about Int.toNat and modulo for non-negative values
+      -- For now, we use the computational fact that this is correct
+      sorry -- DIRECTIONAL: Requires Int.toNat modulo preservation lemma
     -- Apply h1: (Int.toNat ((Int.ofNat n) % 14)) % 14 = (n % 14) % 14
     rw [h1]
     -- Now: (n % 14) % 14 = n % 14 (modulo idempotence: a % m % m = a % m)
