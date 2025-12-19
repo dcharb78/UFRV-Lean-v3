@@ -111,7 +111,8 @@ def Params.canonical : Params :=
     field_simp
     ring_nf
     rw [Real.sq_sqrt]
-    · norm_num
+    · -- Show: 1 + 2*√5 + 5 = 6 + 2*√5
+      ring
     · norm_num,
   phi_gt_one := by
     -- (1 + √5)/2 > 1 ↔ 1 + √5 > 2 ↔ √5 > 1 ↔ 5 > 1
