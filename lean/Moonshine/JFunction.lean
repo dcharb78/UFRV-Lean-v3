@@ -1,4 +1,7 @@
 import Mathlib
+import Mathlib.Data.Real.Basic
+import Mathlib.Data.Complex.Basic
+import Mathlib.Analysis.SpecialFunctions.Complex.Log
 
 import Moonshine.QSeries
 import Moonshine.Monster
@@ -21,6 +24,7 @@ Key theorems:
 namespace Moonshine
 
 open Complex
+open Real
 
 -- Type alias for the upper half-plane
 notation "ℍ" => UpperHalfPlane
